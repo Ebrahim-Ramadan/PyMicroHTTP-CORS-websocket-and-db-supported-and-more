@@ -14,7 +14,7 @@ PyMicroHTTP is a lightweight, flexible HTTP framework built from scratch in Pyth
 
 Clone the repository:
 ```
-$ git clone https://github.com/yourusername/pymicrohttp.git
+$ git clone https://github.com/hasssanezzz/pymicrohttp.git
 $ cd pymicrohttp
 ```
 
