@@ -3,170 +3,87 @@
 PyMicroHTTP is a lightweight, flexible HTTP framework built from scratch in Python. It provides a simple way to create HTTP services without heavy external dependencies, making it ideal for learning purposes or small projects.
 
 ## Features
+for the original docs, see [here](https://github.com/hasssanezzz/pymicrohttp/blob/main/docs/README.md)
 
-- Built on raw TCP sockets
-- Routing with HTTP verb and path matching
-- Middleware support with easy chaining
-- JSON response handling
-- Zero external dependencies
+## Added Features
+
+- HTTP request handling with routing
+- WebSocket support
+- SQLite database integration
+- Static file serving
+- Simple template engine
+- Environment-based configuration
+- CORS support
+- Rate limiting
+- Logging
+- Graceful shutdown
+
+
+## Requirements
+
+- Python 3.7+
+- Required packages: `websockets`, `python-dotenv`
 
 ## Installation
 
-Clone the repository:
+1. Clone this repository:
+`git clone https://github.com/yourusername/simple-python-server.git`
+`cd simple-python-server`
+
+2. Install the required packages:
+`pip install websockets python-dotenv`
+
+3. Create a `.env` file in the project root and set your configuration:
 ```
-$ git clone https://github.com/hasssanezzz/pymicrohttp.git
-$ cd pymicrohttp
+DEBUG=True
+HOST=localhost
+PORT=9090
+DB_NAME=example.db
+LOG_FILE=server.log
+STATIC_DIR=static
 ```
 
-## Quick Start
+## Usage
 
-Here's a simple example to get you started:
+1. Start the server:
+   `python server.py`
+2. The server will start on the specified host and port (default: localhost:9090).
 
-```python
-from server import Server
+3. Access the server:
+- HTTP: `http://localhost:9090`
+- WebSocket: `ws://localhost:9091`
 
-s = Server(port=8080)
+## Adding Routes
 
-@s.register('GET /hello')
+Add new routes to the server by using the `@server.register` decorator:
+
+`@server.register('GET /hello')
 def hello(request):
-    return {"message": "Hello, World!"}
-
-if __name__ == "__main__":
-    s.start_server()
-```
-
-Run this script, and you'll have a server running on `http://localhost:8080`. Access it with:
-
-```
-curl http://localhost:8080/hello
-```
-
-## Routing
-
-Routes are defined using the `@s.register` decorator:
-
-```python
-@s.register('GET /ping')
-def ping_handler(request):
-    return "pong"
-```
-
-Example:
-
-```python
-@s.register('POST /login')
-def login_handler(request):
-    try:
-        body = json.loads(request['body'])
-        if 'username' not in body or 'password' not in body:
-            # do somthing
-    except:
-        return { 'error': 'invalid data' }
-```
-
-## Request Object
-
-The request object is a dict containing these key and value:
-```py
-{
-    'verb': ...
-    'path': ...
-    'headers': ...
-    'body': ...
-}
-```
-
-You can access it via the handler:
-```py
-@s.register('GET /ping')
-def ping_handler(request):
-    # accessing request headers
-    if 'double' in request['headers']:
-        return "pong-pong"
-    return "pong"
-```
-
-## Response Handling
-
-The framework supports different types of responses:
-
-1. Dictionary (automatically converted to JSON):
-   ```python
-   return {"key": "value"}
-   ```
-
-2. String:
-   ```python
-   return "Hello, World!"
-   ```
-
-3. Tuple for custom status codes and headers:
-   ```python
-   return "Not Found", 404
-   # or
-   return "Created", 201, {"Location": "/resource/1"}
-   ```
-
-
+return "Hello, World!"`
 ## Middleware
-Middleware functions can be used to add functionality to your routes:
+Apply middleware to your routes using decorators:
+`
+@server.register('GET /api/data')
+@cors_middleware
+@rate_limit_middleware
+def get_data(request):
+    return {"message": "This is some API data"}
+    `
+Static Files
+Place your static files in the static directory. They will be served at /static/<filename>.
 
-```python
-def log_middleware(next):
-    def handler(request):
-        print(f"Request: {request['verb']} {request['path']}")
-        return next(request)
-    return handler
+## Database Usage
+Use the db object to interact with the SQLite database:
 
-@s.register('GET /logged', log_middleware)
-def logged_route(request):
-    return {"message": "This is a logged route"}
-```
-
-### Before all
-
-If you want to run a middleware before every single request you can use the `s.beforeAll()` decorator:
-```py
-@s.beforeAll()
-def logger(next):
-    def handler(request):
-        verb, path = request['verb'], request['path']
-        print(f'{datetime.datetime.now()} {verb} {path}')
-        return next(request)
-    return handler
-```
-
-### Middleware chaining
-You can chain multiple middlwares together
-```py
-def log_middleware(next):
-    def handler(request):
-        # do your loggin logic here
-        return next(request)
-    return handler
-
-def auth_middleware(next):
-    def handler(request):
-        # do your auth logic here
-        return next(request)
-    return handler
-
-@s.register('GET /protected', [log_middleware, auth_middleware])
-def protected_route(request):
-    return {"message": "This is a protected route"}
-```
-
-## Running the Server
-
-To run the server:
-
-```python
-if __name__ == "__main__":
-    s = Server(port=8080)
-    # Register your routes here
-    s.start_server()
-```
-
+`
+@server.register('GET /users')
+def get_users(request):
+    users = db.query("SELECT * FROM users")
+    return {"users": users}
+    `
+## WebSocket
+WebSocket functionality is available on a separate port (default: 9091). Implement your WebSocket logic in the WebSocketServer class.
+Configuration
+Modify the Config class or use environment variables to configure the server.
 ## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a (Pull Request)[https://github.com/hasssanezzz/PyMicroHTTP/compare/main...Ebrahim-Ramadan:PyMicroHTTP-CORS-websocket-and-db-supported-and-more:main].
