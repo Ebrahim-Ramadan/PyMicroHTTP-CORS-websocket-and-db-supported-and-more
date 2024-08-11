@@ -314,7 +314,11 @@ def home(request):
 def get_data(request):
     return {"message": "This is some API data"}
 
-@server.static('/static', 'index.html')
+# Static file serving
+@server.register('GET /static/<path:path>')
+def serve_static_file(request):
+    path = request['path'].split('/static/')[1]
+    return serve_static(path)
 
 if __name__ == "__main__":
     server.start_server()
