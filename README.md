@@ -27,8 +27,7 @@ for the original docs, see [here](https://github.com/hasssanezzz/pymicrohttp/blo
 ## Installation
 
 1. Clone this repository:
-`git clone https://github.com/Ebrahim-Ramadan/simple-python-server.git`
-`cd simple-python-server`
+`git clone https://github.com/Ebrahim-Ramadan/PyMicroHTTP-CORS-websocket-and-db-supported-and-more.git`
 
 2. Install the required packages:
 `pip install websockets python-dotenv`
