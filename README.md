@@ -27,7 +27,7 @@ for the original docs, see [here](https://github.com/hasssanezzz/pymicrohttp/blo
 ## Installation
 
 1. Clone this repository:
-`git clone https://github.com/yourusername/simple-python-server.git`
+`git clone https://github.com/Ebrahim-Ramadan/simple-python-server.git`
 `cd simple-python-server`
 
 2. Install the required packages:
